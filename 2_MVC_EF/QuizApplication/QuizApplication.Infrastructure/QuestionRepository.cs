@@ -10,19 +10,25 @@ namespace QuizApplication.Infrastructure
 {
     internal class QuestionRepository : IQuestionRepository
     {
+        List<Question> questions;
+
         public QuestionRepository(QuizDbContext dbContext)
         {
-
+            questions = dbContext.Questions.ToList();
         }
 
         public IReadOnlyList<Question> GetByCategoryId(int categoryId)
         {
-            throw new NotImplementedException();
+            List<Question> receivedQuestions = questions.Where(q => q.CategoryId == categoryId).ToList();
+            return receivedQuestions;
         }
 
         public Question GetByIdWithAnswers(int id)
         {
-            throw new NotImplementedException();
+            Random random = new Random();
+            List<Question> questionsFromIds = questions.Where(q => q.Id == id).ToList();
+            questionsFromIds.Add(questions[random.Next(questions.Count())]);
+            return questionsFromIds.First();
         }
     }
 }

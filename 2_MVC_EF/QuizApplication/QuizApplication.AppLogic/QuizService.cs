@@ -6,21 +6,34 @@ using QuizApplication.Domain;
 
 namespace QuizApplication.AppLogic
 {
-    internal class QuizService
+    internal class QuizService : IQuizService 
     {
+        
+        private readonly ICategoryRepository _categoryRepository;
+        private readonly IQuestionRepository _questionRepository;
+
+        public QuizService(ICategoryRepository categoryRepo, IQuestionRepository questionRepo)
+        {
+            _categoryRepository = categoryRepo;
+            _questionRepository = questionRepo;
+        }
+
+
         public IReadOnlyList<Category> GetAllCategories()
         {
-            throw new NotImplementedException();
+            return _categoryRepository.GetAll();
         }
 
         public Question GetQuestionByIdWithAnswersAndExtra(int id)
         {
-            throw new NotImplementedException();
+            return _questionRepository.GetByIdWithAnswers(id);
         }
 
         public IReadOnlyList<Question> GetQuestionsInCategory(int id)
         {
-            throw new NotImplementedException();
+            return _questionRepository.GetByCategoryId(id);
+
         }
+
     }
 }
