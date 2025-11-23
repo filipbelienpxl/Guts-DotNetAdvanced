@@ -12,7 +12,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 /* Add DB Context here */
-
+builder.Services.AddDbContext<QuizDbContext>(
+    options =>
+    {
+        string connectionString = builder.Configuration["ConnectionStrings:DevConString"];
+        options.UseSqlServer(connectionString);
+    });
 
 /* Add services for the DI here! */
 

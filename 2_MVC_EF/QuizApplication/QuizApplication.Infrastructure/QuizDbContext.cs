@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Migrations;
 using QuizApplication.Domain;
 using System;
 using System.Collections.Generic;
@@ -13,10 +14,11 @@ namespace QuizApplication.Infrastructure
     internal class QuizDbContext : DbContext
     {
         public DbSet<Question> Questions { get; set; } = null!; //with '!' we are telling the compiler that we are sure that this property will never be null (the base class 'DbContext' takes care of this)
+        public DbSet<Answer> Answers { get; set; } = null!;
 
         public QuizDbContext(DbContextOptions<QuizDbContext> options) : base(options)
         {
-
+           
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -87,5 +89,7 @@ namespace QuizApplication.Infrastructure
         };
 
         }
+
+        
     }
 }
