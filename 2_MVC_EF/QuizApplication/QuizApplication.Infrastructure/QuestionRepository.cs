@@ -1,4 +1,5 @@
-﻿using QuizApplication.AppLogic.Contracts;
+﻿using Microsoft.EntityFrameworkCore;
+using QuizApplication.AppLogic.Contracts;
 using QuizApplication.Domain;
 using System;
 using System.Collections.Generic;
@@ -10,25 +11,26 @@ namespace QuizApplication.Infrastructure
 {
     internal class QuestionRepository : IQuestionRepository
     {
-        List<Question> questions;
         
+        private readonly QuizDbContext _dbContext;
 
         public QuestionRepository(QuizDbContext dbContext)
         {
-            questions = dbContext.Questions.ToList();
+            _dbContext = dbContext;
         }
 
         public IReadOnlyList<Question> GetByCategoryId(int categoryId)
         {
-            List<Question> receivedQuestions = questions.Where(q => q.CategoryId == categoryId).ToList();
-            return receivedQuestions;
+            return _dbContext.Questions
+                .Where(q => q.CategoryId == categoryId)
+                .ToList();
         }
 
         public Question GetByIdWithAnswers(int id)
         {
-            List<Question> questionsById = questions.Where(q => q.Id == id).ToList();
-            
-            return questionsById.First();
+            return _dbContext.Questions
+                .Include(q => q.Answers)
+                .FirstOrDefault(q => q.Id == id)!;
         }
     }
 }
