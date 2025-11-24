@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.FileProviders;
 using QuizApplication.AppLogic;
 using QuizApplication.AppLogic.Contracts;
@@ -15,11 +15,12 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<QuizDbContext>(
     options =>
     {
-        string connectionString = builder.Configuration["ConnectionStrings:DevConString"];
+        string connectionString = builder.Configuration.GetConnectionString("DefaultConnection")!;
         options.UseSqlServer(connectionString);
     });
 
 /* Add services for the DI here! */
+
 
 
 var app = builder.Build();
@@ -42,6 +43,9 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+using IServiceScope startupScope = app.Services.CreateScope();
+QuizDbContext initializerDb = startupScope.ServiceProvider.GetRequiredService<QuizDbContext>();
+initializerDb.SeedData();
 
 app.Run();
 

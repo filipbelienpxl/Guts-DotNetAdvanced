@@ -11,6 +11,7 @@ namespace QuizApplication.Infrastructure
     internal class QuestionRepository : IQuestionRepository
     {
         List<Question> questions;
+        
 
         public QuestionRepository(QuizDbContext dbContext)
         {
@@ -25,10 +26,9 @@ namespace QuizApplication.Infrastructure
 
         public Question GetByIdWithAnswers(int id)
         {
-            Random random = new Random();
-            List<Question> questionsFromIds = questions.Where(q => q.Id == id).ToList();
-            questionsFromIds.Add(questions[random.Next(questions.Count())]);
-            return questionsFromIds.First();
+            List<Question> questionsById = questions.Where(q => q.Id == id).ToList();
+            
+            return questionsById.First();
         }
     }
 }
