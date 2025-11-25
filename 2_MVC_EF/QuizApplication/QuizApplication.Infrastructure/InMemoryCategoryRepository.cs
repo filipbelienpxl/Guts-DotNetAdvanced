@@ -44,12 +44,13 @@ namespace QuizApplication.Infrastructure
 
         public IReadOnlyList<Category> GetAll()
         {
-            throw new NotImplementedException();
+           
+            return _categories;
         }
 
         public Category? GetById(int id)
         {
-            throw new NotImplementedException();
+            return _categories.FirstOrDefault(c => c.Id == id);
         }
     }
 }

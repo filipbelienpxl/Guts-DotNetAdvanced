@@ -26,7 +26,17 @@ namespace QuizApplication.AppLogic
 
         public Question GetQuestionByIdWithAnswersAndExtra(int id)
         {
-            return _questionRepository.GetByIdWithAnswers(id);
+            Question questionsWithAnswers = _questionRepository.GetByIdWithAnswers(id);
+
+            bool hasCorrectAnswer = questionsWithAnswers.Answers.Any(a => a.IsCorrect);
+            Answer answers = new Answer
+            {
+                AnswerText = "None of the answers is correct.",
+                IsCorrect = !hasCorrectAnswer,
+            };
+
+            questionsWithAnswers.Answers.Add(answers);
+            return questionsWithAnswers;
         }
 
         public IReadOnlyList<Question> GetQuestionsInCategory(int id)

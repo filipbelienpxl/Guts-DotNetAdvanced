@@ -10,24 +10,30 @@ namespace QuizApplication.Web.Controllers
     public class QuestionController : Controller
     {
         private readonly ILogger<QuestionController> _logger;
+        private readonly IQuizService _quizService;
 
         public QuestionController(ILogger<QuestionController> logger, IQuizService quizService)
         {
             _logger = logger;
+            _quizService = quizService;
         }
         public IActionResult Index()
         {
-            return View();
+           
+            return View(_quizService.GetAllCategories());
         }
 
         public IActionResult QuestionsInCategory(int id)
         {
-            return View();
+            return View(_quizService.GetQuestionsInCategory(id));
         }
 
         public IActionResult QuestionWithAnswers(int id)
         {
-            return View();
+            QuestionViewModel viewModel = new QuestionViewModel(_quizService.GetQuestionByIdWithAnswersAndExtra(id));
+            
+
+            return View(viewModel);
         }
 
 
